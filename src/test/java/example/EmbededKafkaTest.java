@@ -13,8 +13,8 @@ import java.util.Collections;
 
 public final class EmbededKafkaTest {
   @ClassRule
-  public static final EmbeddedKafkaRule KAFKA_RULE = new EmbeddedKafkaRule(2, true);
-  public static final KafkaProducer<String, String> PRODUCER =
+  public static final EmbeddedKafkaRule KAFKA_RULE = new EmbeddedKafkaRule(1, true);
+  public final KafkaProducer<String, String> producer =
       new KafkaProducer<>(Collections.singletonMap(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_RULE.getEmbeddedKafka().getBrokersAsString()),
           new StringSerializer(), new StringSerializer());
 
@@ -27,6 +27,6 @@ public final class EmbededKafkaTest {
   public void writeToTopic() {
     final String topicName = "whatever";
     KAFKA_RULE.getEmbeddedKafka().addTopics(topicName);
-    PRODUCER.send(new ProducerRecord<>(topicName, "key", "value"));
+    producer.send(new ProducerRecord<>(topicName, "key", "value"));
   }
 }
